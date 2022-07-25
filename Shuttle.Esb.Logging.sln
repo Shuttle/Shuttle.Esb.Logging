@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Esb.Logging", "Shuttle.Esb.Logging\Shuttle.Esb.Logging.csproj", "{4CF73844-B1F7-4E84-85F0-5A2774B6A6E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CF73844-B1F7-4E84-85F0-5A2774B6A6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF73844-B1F7-4E84-85F0-5A2774B6A6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF73844-B1F7-4E84-85F0-5A2774B6A6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF73844-B1F7-4E84-85F0-5A2774B6A6E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9AC41BB-2E1F-41D3-838C-856A2D3FA600}
+	EndGlobalSection
+EndGlobal
