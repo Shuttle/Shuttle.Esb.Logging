@@ -8,7 +8,7 @@ namespace Shuttle.Esb.Logging
         public static ServiceBusLoggingOptions AddPipelineType<T>(
             this ServiceBusLoggingOptions serviceBusLoggingOptions)
         {
-            return serviceBusLoggingOptions.AddPipelineEventType(typeof(T));
+            return serviceBusLoggingOptions.AddPipelineType(typeof(T));
         }
 
         public static ServiceBusLoggingOptions AddPipelineType(this ServiceBusLoggingOptions serviceBusLoggingOptions, Type type)
@@ -35,12 +35,12 @@ namespace Shuttle.Esb.Logging
         {
             Guard.AgainstNull(type, nameof(type));
 
-            if (serviceBusLoggingOptions.PipelineTypes == null)
+            if (serviceBusLoggingOptions.PipelineEventTypes == null)
             {
                 throw new InvalidOperationException(Resources.PipelineTypesNullException);
             }
 
-            serviceBusLoggingOptions.PipelineTypes.Add(type.AssemblyQualifiedName);
+            serviceBusLoggingOptions.PipelineEventTypes.Add(type.AssemblyQualifiedName);
 
             return serviceBusLoggingOptions;
         }
