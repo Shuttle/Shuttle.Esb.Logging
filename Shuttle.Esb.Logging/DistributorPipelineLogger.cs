@@ -5,11 +5,11 @@ using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
 {
-    public class OutboxPipelineLogger
+    public class DistributorPipelineLogger
     {
-        private readonly Type _pipelineType = typeof(OutboxPipeline);
+        private readonly Type _pipelineType = typeof(DistributorPipeline);
 
-        public OutboxPipelineLogger(ILogger<OutboxPipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration, IPipelineFactory pipelineFactory)
+        public DistributorPipelineLogger(ILogger<DistributorPipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration, IPipelineFactory pipelineFactory)
         {
             Guard.AgainstNull(logger, nameof(logger));
             Guard.AgainstNull(serviceBusLoggingConfiguration, nameof(serviceBusLoggingConfiguration));
@@ -27,7 +27,7 @@ namespace Shuttle.Esb.Logging
                     return;
                 }
 
-                args.Pipeline.RegisterObserver(new OutboxPipelineObserver(logger, serviceBusLoggingConfiguration));
+                args.Pipeline.RegisterObserver(new DistributorPipelineObserver(logger, serviceBusLoggingConfiguration));
             };
         }
     }
