@@ -12,10 +12,7 @@ namespace Shuttle.Esb.Logging
         IPipelineObserver<OnDispatchTransportMessage>,
         IPipelineObserver<OnAfterDispatchTransportMessage>,
         IPipelineObserver<OnAcknowledgeMessage>,
-        IPipelineObserver<OnAfterAcknowledgeMessage>,
-        IPipelineObserver<OnPipelineStarting>,
-        IPipelineObserver<OnPipelineException>,
-        IPipelineObserver<OnAbortPipeline>
+        IPipelineObserver<OnAfterAcknowledgeMessage>
     {
         public OutboxPipelineObserver(ILogger<OutboxPipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration) : base(logger, serviceBusLoggingConfiguration)
         {
@@ -59,21 +56,6 @@ namespace Shuttle.Esb.Logging
         }
 
         public void Execute(OnAfterAcknowledgeMessage pipelineEvent)
-        {
-            Trace(pipelineEvent);
-        }
-
-        public void Execute(OnAbortPipeline pipelineEvent)
-        {
-            Trace(pipelineEvent);
-        }
-
-        public void Execute(OnPipelineStarting pipelineEvent)
-        {
-            Trace(pipelineEvent);
-        }
-
-        public void Execute(OnPipelineException pipelineEvent)
         {
             Trace(pipelineEvent);
         }

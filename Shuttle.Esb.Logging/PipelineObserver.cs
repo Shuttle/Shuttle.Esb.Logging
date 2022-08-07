@@ -6,7 +6,10 @@ using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
 {
-    public abstract class PipelineObserver<T>
+    public abstract class PipelineObserver<T> :
+        IPipelineObserver<OnPipelineStarting>,
+        IPipelineObserver<OnPipelineException>,
+        IPipelineObserver<OnAbortPipeline>
     {
         private readonly ILogger<T> _logger;
         private readonly IServiceBusLoggingConfiguration _serviceBusLoggingConfiguration;
@@ -41,6 +44,20 @@ namespace Shuttle.Esb.Logging
             _eventCounts[type] += 1;
 
             _logger.LogTrace($"{DateTime.Now:O} - [{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}]{(string.IsNullOrEmpty(message) ? string.Empty : $" : {message}")}");
+        }
+        public void Execute(OnAbortPipeline pipelineEvent)
+        {
+            Trace(pipelineEvent);
+        }
+
+        public void Execute(OnPipelineStarting pipelineEvent)
+        {
+            Trace(pipelineEvent);
+        }
+
+        public void Execute(OnPipelineException pipelineEvent)
+        {
+            Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.Message}'");
         }
     }
 }
