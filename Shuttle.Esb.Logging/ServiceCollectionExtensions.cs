@@ -23,6 +23,8 @@ namespace Shuttle.Esb.Logging
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
             });
 
+            services.AddPipelineModule<StartupPipelineLogger>();
+            services.AddPipelineModule<ShutdownPipelineLogger>();
             services.AddPipelineModule<InboxMessagePipelineLogger>();
             services.AddPipelineModule<ControlInboxMessagePipelineLogger>();
             services.AddPipelineModule<OutboxPipelineLogger>();
