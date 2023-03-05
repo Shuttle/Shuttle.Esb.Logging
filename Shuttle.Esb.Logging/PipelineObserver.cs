@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
@@ -25,7 +26,7 @@ namespace Shuttle.Esb.Logging
             _serviceBusLoggingConfiguration = serviceBusLoggingConfiguration;
         }
         
-        protected void Trace(IPipelineEvent pipelineEvent, string message = "")
+        protected Task Trace(IPipelineEvent pipelineEvent, string message = "")
         {
             Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
 
@@ -33,7 +34,7 @@ namespace Shuttle.Esb.Logging
 
             if (!_serviceBusLoggingConfiguration.ShouldLogPipelineEventType(type))
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (!_eventCounts.ContainsKey(type))
@@ -44,20 +45,23 @@ namespace Shuttle.Esb.Logging
             _eventCounts[type] += 1;
 
             _logger.LogTrace($"{DateTime.Now:O} - [{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}]{(string.IsNullOrEmpty(message) ? string.Empty : $" : {message}")}");
-        }
-        public void Execute(OnAbortPipeline pipelineEvent)
-        {
-            Trace(pipelineEvent);
+
+            return Task.CompletedTask;
         }
 
-        public void Execute(OnPipelineStarting pipelineEvent)
+        public Task Execute(OnAbortPipeline pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnPipelineException pipelineEvent)
+        public Task Execute(OnPipelineStarting pipelineEvent)
         {
-            Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.Message}'");
+            return Trace(pipelineEvent);
+        }
+
+        public Task Execute(OnPipelineException pipelineEvent)
+        {
+            return Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.Message}'");
         }
     }
 }

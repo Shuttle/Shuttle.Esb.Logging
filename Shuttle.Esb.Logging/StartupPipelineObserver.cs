@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
@@ -22,69 +23,69 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnStarting pipelineEvent)
+        public Task Execute(OnStarting pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnConfigure pipelineEvent)
+        public Task Execute(OnConfigure pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterConfigure pipelineEvent)
+        public Task Execute(OnAfterConfigure pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnCreatePhysicalQueues pipelineEvent)
+        public Task Execute(OnCreatePhysicalQueues pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterCreatePhysicalQueues pipelineEvent)
+        public Task Execute(OnAfterCreatePhysicalQueues pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartInboxProcessing pipelineEvent)
+        public Task Execute(OnStartInboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartInboxProcessing pipelineEvent)
+        public Task Execute(OnAfterStartInboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartControlInboxProcessing pipelineEvent)
+        public Task Execute(OnStartControlInboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartControlInboxProcessing pipelineEvent)
+        public Task Execute(OnAfterStartControlInboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartOutboxProcessing pipelineEvent)
+        public Task Execute(OnStartOutboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartOutboxProcessing pipelineEvent)
+        public Task Execute(OnAfterStartOutboxProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
+        public Task Execute(OnStartDeferredMessageProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartDeferredMessageProcessing pipelineEvent)
+        public Task Execute(OnAfterStartDeferredMessageProcessing pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

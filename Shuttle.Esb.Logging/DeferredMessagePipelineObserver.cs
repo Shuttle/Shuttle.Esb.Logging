@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 
@@ -18,36 +19,36 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnAfterDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterGetMessage pipelineEvent)
+        public Task Execute(OnAfterGetMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnGetMessage pipelineEvent)
+        public Task Execute(OnGetMessage pipelineEvent)
         {
             Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
 
-            Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
+            return Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
         }
 
-        public void Execute(OnProcessDeferredMessage pipelineEvent)
+        public Task Execute(OnProcessDeferredMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterProcessDeferredMessage pipelineEvent)
+        public Task Execute(OnAfterProcessDeferredMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
@@ -11,14 +12,14 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnStopping pipelineEvent)
+        public Task Execute(OnStopping pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStopped pipelineEvent)
+        public Task Execute(OnStopped pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

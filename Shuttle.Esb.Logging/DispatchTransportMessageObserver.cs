@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
@@ -17,34 +18,34 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnFindRouteForMessage pipelineEvent)
+        public Task Execute(OnFindRouteForMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterFindRouteForMessage pipelineEvent)
+        public Task Execute(OnAfterFindRouteForMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnSerializeTransportMessage pipelineEvent)
+        public Task Execute(OnSerializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterSerializeTransportMessage pipelineEvent)
+        public Task Execute(OnAfterSerializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDispatchTransportMessage pipelineEvent)
+        public Task Execute(OnDispatchTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDispatchTransportMessage pipelineEvent)
+        public Task Execute(OnAfterDispatchTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

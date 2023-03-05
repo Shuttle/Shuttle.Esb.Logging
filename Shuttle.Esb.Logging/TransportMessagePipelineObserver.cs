@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
@@ -18,44 +19,44 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnAssembleMessage pipelineEvent)
+        public Task Execute(OnAssembleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterAssembleMessage pipelineEvent)
+        public Task Execute(OnAfterAssembleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnSerializeMessage pipelineEvent)
+        public Task Execute(OnSerializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterSerializeMessage pipelineEvent)
+        public Task Execute(OnAfterSerializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnEncryptMessage pipelineEvent)
+        public Task Execute(OnEncryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterEncryptMessage pipelineEvent)
+        public Task Execute(OnAfterEncryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnCompressMessage pipelineEvent)
+        public Task Execute(OnCompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterCompressMessage pipelineEvent)
+        public Task Execute(OnAfterCompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

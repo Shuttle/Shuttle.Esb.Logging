@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
@@ -22,59 +23,59 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnGetMessage pipelineEvent)
+        public Task Execute(OnGetMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnAfterDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnHandleDistributeMessage pipelineEvent)
+        public Task Execute(OnHandleDistributeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterHandleDistributeMessage pipelineEvent)
+        public Task Execute(OnAfterHandleDistributeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnSerializeTransportMessage pipelineEvent)
+        public Task Execute(OnSerializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterSerializeTransportMessage pipelineEvent)
+        public Task Execute(OnAfterSerializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDispatchTransportMessage pipelineEvent)
+        public Task Execute(OnDispatchTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDispatchTransportMessage pipelineEvent)
+        public Task Execute(OnAfterDispatchTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAcknowledgeMessage pipelineEvent)
+        public Task Execute(OnAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterAcknowledgeMessage pipelineEvent)
+        public Task Execute(OnAfterAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }

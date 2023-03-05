@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 using Shuttle.Core.PipelineTransaction;
@@ -35,116 +36,116 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public void Execute(OnAcknowledgeMessage pipelineEvent)
+        public Task Execute(OnAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterAcknowledgeMessage pipelineEvent)
+        public Task Execute(OnAfterAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterAssessMessageHandling pipelineEvent)
+        public Task Execute(OnAfterAssessMessageHandling pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDecompressMessage pipelineEvent)
+        public Task Execute(OnAfterDecompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDecryptMessage pipelineEvent)
+        public Task Execute(OnAfterDecryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDeserializeMessage pipelineEvent)
+        public Task Execute(OnAfterDeserializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnAfterDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterGetMessage pipelineEvent)
+        public Task Execute(OnAfterGetMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterHandleMessage pipelineEvent)
+        public Task Execute(OnAfterHandleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterSendDeferred pipelineEvent)
+        public Task Execute(OnAfterSendDeferred pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnAssessMessageHandling pipelineEvent)
+        public Task Execute(OnAssessMessageHandling pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnCompleteTransactionScope pipelineEvent)
+        public Task Execute(OnCompleteTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDecompressMessage pipelineEvent)
+        public Task Execute(OnDecompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDecryptMessage pipelineEvent)
+        public Task Execute(OnDecryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDeserializeMessage pipelineEvent)
+        public Task Execute(OnDeserializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDeserializeTransportMessage pipelineEvent)
+        public Task Execute(OnDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnDisposeTransactionScope pipelineEvent)
+        public Task Execute(OnDisposeTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnGetMessage pipelineEvent)
+        public Task Execute(OnGetMessage pipelineEvent)
         {
             Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
 
-            Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
+            return Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
         }
 
-        public void Execute(OnHandleMessage pipelineEvent)
+        public Task Execute(OnHandleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnProcessIdempotenceMessage pipelineEvent)
+        public Task Execute(OnProcessIdempotenceMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnSendDeferred pipelineEvent)
+        public Task Execute(OnSendDeferred pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartTransactionScope pipelineEvent)
+        public Task Execute(OnStartTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            return Trace(pipelineEvent);
         }
     }
 }
