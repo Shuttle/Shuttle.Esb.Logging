@@ -15,15 +15,14 @@ namespace Shuttle.Esb.Logging
             Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
             Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
 
-            if (!serviceBusLoggingOptions.Value.LogQueueEvents)
+            if (!serviceBusLoggingOptions.Value.QueueEvents)
             {
                 return;
             }
 
             _logger = Guard.AgainstNull(logger, nameof(logger));
-            Guard.AgainstNull(queueService, nameof(queueService));
 
-            queueService.QueueCreated += (sender, args) =>
+            Guard.AgainstNull(queueService, nameof(queueService)).QueueCreated += (sender, args) =>
             {
                 args.Queue.MessageAcknowledged += QueueOnMessageAcknowledged;
                 args.Queue.MessageEnqueued += QueueOnMessageEnqueued;

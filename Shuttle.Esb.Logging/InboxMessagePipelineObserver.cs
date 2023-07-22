@@ -74,7 +74,9 @@ namespace Shuttle.Esb.Logging
 
         public Task Execute(OnAfterGetMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
+
+            return Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
         }
 
         public Task Execute(OnAfterHandleMessage pipelineEvent)

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Shuttle.Core.Contract;
+﻿using System.Collections.Generic;
 
 namespace Shuttle.Esb.Logging
 {
     public class ServiceBusLoggingOptions
     {
-        public List<string> PipelineTypes { get; set; } = new List<string>();
         public List<string> PipelineEventTypes { get; set; } = new List<string>();
-        public bool LogQueueEvents { get; set; }
+        public List<string> PipelineTypes { get; set; } = new List<string>();
+        public bool QueueEvents { get; set; }
+        public bool TransportMessageDeferred { get; set; }
     }
 }

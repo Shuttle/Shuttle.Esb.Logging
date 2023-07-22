@@ -22,10 +22,11 @@ namespace Shuttle.Esb.Logging
             {
                 options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
-                options.LogQueueEvents = serviceBusLoggingBuilder.Options.LogQueueEvents;
+                options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
             });
 
             services.AddPipelineFeature<QueueEventLogger>();
+            services.AddPipelineFeature<TransportMessageDeferredLogger>();
             services.AddPipelineFeature<StartupPipelineLogger>();
             services.AddPipelineFeature<ShutdownPipelineLogger>();
             services.AddPipelineFeature<InboxMessagePipelineLogger>();
