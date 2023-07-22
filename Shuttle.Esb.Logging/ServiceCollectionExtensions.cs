@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
@@ -21,8 +22,10 @@ namespace Shuttle.Esb.Logging
             {
                 options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
+                options.LogQueueEvents = serviceBusLoggingBuilder.Options.LogQueueEvents;
             });
 
+            services.AddPipelineFeature<QueueEventLogger>();
             services.AddPipelineFeature<StartupPipelineLogger>();
             services.AddPipelineFeature<ShutdownPipelineLogger>();
             services.AddPipelineFeature<InboxMessagePipelineLogger>();

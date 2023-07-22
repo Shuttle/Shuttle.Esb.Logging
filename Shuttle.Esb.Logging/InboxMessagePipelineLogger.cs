@@ -5,7 +5,7 @@ using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
 {
-    public class InboxMessagePipelineLogger
+    public class InboxMessagePipelineLogger : IPipelineFeature
     {
         private readonly Type _pipelineType = typeof(InboxMessagePipeline);
 

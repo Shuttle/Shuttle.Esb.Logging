@@ -6,8 +6,6 @@ namespace Shuttle.Esb.Logging
 {
     public class StartupPipelineObserver : PipelineObserver<StartupPipelineLogger>,
         IPipelineObserver<OnStarting>,
-        IPipelineObserver<OnConfigure>,
-        IPipelineObserver<OnAfterConfigure>,
         IPipelineObserver<OnCreatePhysicalQueues>,
         IPipelineObserver<OnAfterCreatePhysicalQueues>,
         IPipelineObserver<OnStartInboxProcessing>,
@@ -24,16 +22,6 @@ namespace Shuttle.Esb.Logging
         }
 
         public Task Execute(OnStarting pipelineEvent)
-        {
-            return Trace(pipelineEvent);
-        }
-
-        public Task Execute(OnConfigure pipelineEvent)
-        {
-            return Trace(pipelineEvent);
-        }
-
-        public Task Execute(OnAfterConfigure pipelineEvent)
         {
             return Trace(pipelineEvent);
         }
