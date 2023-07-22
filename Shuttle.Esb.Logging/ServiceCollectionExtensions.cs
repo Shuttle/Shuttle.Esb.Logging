@@ -23,6 +23,7 @@ namespace Shuttle.Esb.Logging
                 options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
                 options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
+                options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
             });
 
             services.AddPipelineFeature<QueueEventLogger>();
