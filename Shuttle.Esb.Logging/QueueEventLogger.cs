@@ -24,6 +24,8 @@ namespace Shuttle.Esb.Logging
 
             Guard.AgainstNull(queueService, nameof(queueService)).QueueCreated += (sender, args) =>
             {
+                _logger.LogTrace($"{DateTime.Now:O} - [IQueueService.Created] : uri = '{args.Queue.Uri}'");
+
                 args.Queue.MessageAcknowledged += QueueOnMessageAcknowledged;
                 args.Queue.MessageEnqueued += QueueOnMessageEnqueued;
                 args.Queue.MessageReceived += QueueOnMessageReceived;
