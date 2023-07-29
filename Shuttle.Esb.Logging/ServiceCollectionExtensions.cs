@@ -26,16 +26,16 @@ namespace Shuttle.Esb.Logging
                 options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
             });
 
-            services.AddPipelineFeature<QueueEventLogger>();
-            services.AddPipelineFeature<TransportMessageDeferredLogger>();
-            services.AddPipelineFeature<StartupPipelineLogger>();
-            services.AddPipelineFeature<ShutdownPipelineLogger>();
-            services.AddPipelineFeature<InboxMessagePipelineLogger>();
-            services.AddPipelineFeature<ControlInboxMessagePipelineLogger>();
-            services.AddPipelineFeature<OutboxPipelineLogger>();
-            services.AddPipelineFeature<DeferredMessagePipelineLogger>();
-            services.AddPipelineFeature<DispatchTransportMessagePipelineLogger>();
-            services.AddPipelineFeature<TransportMessagePipelineLogger>();
+            services.AddHostedService<QueueEventLogger>();
+            services.AddHostedService<TransportMessageDeferredLogger>();
+            services.AddHostedService<StartupPipelineLogger>();
+            services.AddHostedService<ShutdownPipelineLogger>();
+            services.AddHostedService<InboxMessagePipelineLogger>();
+            services.AddHostedService<ControlInboxMessagePipelineLogger>();
+            services.AddHostedService<OutboxPipelineLogger>();
+            services.AddHostedService<DeferredMessagePipelineLogger>();
+            services.AddHostedService<DispatchTransportMessagePipelineLogger>();
+            services.AddHostedService<TransportMessagePipelineLogger>();
 
             services.AddSingleton<IServiceBusLoggingConfiguration, ServiceBusLoggingConfiguration>();
 
