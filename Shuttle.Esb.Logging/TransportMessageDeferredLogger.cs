@@ -21,15 +21,15 @@ namespace Shuttle.Esb.Logging
             _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
             _logger = Guard.AgainstNull(logger, nameof(logger));
             _deferTransportMessageObserver = Guard.AgainstNull(deferTransportMessageObserver, nameof(deferTransportMessageObserver));
-        }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
             if (_serviceBusLoggingOptions.TransportMessageDeferred)
             {
                 _deferTransportMessageObserver.TransportMessageDeferred += OnTransportMessageDeferred;
             }
+        }
 
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
             return Task.CompletedTask;
         }
 

@@ -23,15 +23,15 @@ namespace Shuttle.Esb.Logging
             _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
             _logger = Guard.AgainstNull(logger, nameof(logger));
             _queueService = Guard.AgainstNull(queueService, nameof(queueService));
-        }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
             if (_serviceBusLoggingOptions.QueueEvents)
             {
                 _queueService.QueueCreated += OnQueueCreated;
             }
+        }
 
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
             return Task.CompletedTask;
         }
 

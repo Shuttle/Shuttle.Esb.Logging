@@ -20,16 +20,16 @@ namespace Shuttle.Esb.Logging
             _logger = Guard.AgainstNull(logger, nameof(logger));
             _serviceBusLoggingConfiguration = Guard.AgainstNull(serviceBusLoggingConfiguration, nameof(serviceBusLoggingConfiguration));
             _pipelineFactory = Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
-        }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
             if (_serviceBusLoggingConfiguration.ShouldLogPipelineType(_pipelineType))
             {
                 _pipelineFactory.PipelineCreated += OnPipelineCreated;
 
             }
+        }
 
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
             return Task.CompletedTask;
         }
 
