@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +26,8 @@ namespace Shuttle.Esb.Logging
             if (_serviceBusLoggingOptions.QueueEvents)
             {
                 _queueService.QueueCreated += OnQueueCreated;
+                _queueService.QueueDisposing+= OnQueueDisposing;
+                _queueService.QueueDisposed+= OnQueueDisposed;
             }
         }
 
@@ -45,61 +46,82 @@ namespace Shuttle.Esb.Logging
                     queue.MessageEnqueued -= QueueOnMessageEnqueued;
                     queue.MessageReceived -= QueueOnMessageReceived;
                     queue.MessageReleased -= QueueOnMessageReleased;
+                    queue.OperationStarting -= QueueOnOperationStarting;
                     queue.OperationCompleted -= QueueOnOperationCompleted;
                 }
 
                 _queueService.QueueCreated -= OnQueueCreated;
+                _queueService.QueueDisposing -= OnQueueDisposing;
+                _queueService.QueueDisposed -= OnQueueDisposed;
             }
             
             return Task.CompletedTask;
         }
 
-        private void OnQueueCreated(object sender, QueueCreatedEventArgs args)
+        private void OnQueueCreated(object sender, QueueEventArgs args)
         {
             _queues.Add(args.Queue);
 
-            _logger.LogTrace($"{DateTime.Now:O} - [IQueueService.Created] : uri = '{args.Queue.Uri}'");
+            _logger.LogTrace($"[OnQueueCreated] : uri = '{args.Queue.Uri}'");
 
             args.Queue.MessageAcknowledged += QueueOnMessageAcknowledged;
             args.Queue.MessageEnqueued += QueueOnMessageEnqueued;
             args.Queue.MessageReceived += QueueOnMessageReceived;
             args.Queue.MessageReleased += QueueOnMessageReleased;
+            args.Queue.OperationStarting += QueueOnOperationStarting;
             args.Queue.OperationCompleted += QueueOnOperationCompleted;
+        }
+
+        private void OnQueueDisposing(object sender, QueueEventArgs args)
+        {
+            _logger.LogTrace($"[IQueueService.Dispo] : uri = '{args.Queue.Uri}'");
+        }
+
+        private void OnQueueDisposed(object sender, QueueEventArgs args)
+        {
+            _logger.LogTrace($"[IQueueService.Created] : uri = '{args.Queue.Uri}'");
         }
 
         private void QueueOnMessageAcknowledged(object sender, MessageAcknowledgedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{queue.Uri.Uri.Scheme}.MessageAcknowledged (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageAcknowledged (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
         }
 
         private void QueueOnMessageEnqueued(object sender, MessageEnqueuedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{queue.Uri.Uri.Scheme}.MessageEnqueued (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageEnqueued (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}'");
         }
 
         private void QueueOnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{queue.Uri.Uri.Scheme}.MessageReceived (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReceived (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
         }
 
         private void QueueOnMessageReleased(object sender, MessageReleasedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{queue.Uri.Uri.Scheme}.MessageReleased (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReleased (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
         }
 
-        private void QueueOnOperationCompleted(object sender, OperationCompletedEventArgs e)
+        private void QueueOnOperationStarting(object sender, OperationEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{queue.Uri.Uri.Scheme}.OperationCompleted (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.OperationStarting (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
+        }
+
+        private void QueueOnOperationCompleted(object sender, OperationEventArgs e)
+        {
+            var queue = (IQueue)sender;
+
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.OperationCompleted (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
         }
     }
 }

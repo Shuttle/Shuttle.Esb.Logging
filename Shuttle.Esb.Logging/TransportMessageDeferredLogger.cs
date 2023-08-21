@@ -47,7 +47,7 @@ namespace Shuttle.Esb.Logging
         {
             Guard.AgainstNull(args, nameof(args));
 
-            _logger.LogTrace($"{DateTime.Now:O} - [TransportMessageDeferred (thread {Thread.CurrentThread.ManagedThreadId})] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}'");
+            _logger.LogTrace($"[TransportMessageDeferred (thread {Thread.CurrentThread.ManagedThreadId})] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}'");
         }
     }
 }
