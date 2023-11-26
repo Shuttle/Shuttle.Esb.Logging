@@ -19,44 +19,84 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public Task Execute(OnAssembleMessage pipelineEvent)
+        public void Execute(OnAssembleMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnAfterAssembleMessage pipelineEvent)
+        public async Task ExecuteAsync(OnAssembleMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnSerializeMessage pipelineEvent)
+        public void Execute(OnAfterAssembleMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnAfterSerializeMessage pipelineEvent)
+        public async Task ExecuteAsync(OnAfterAssembleMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnEncryptMessage pipelineEvent)
+        public void Execute(OnSerializeMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnAfterEncryptMessage pipelineEvent)
+        public async Task ExecuteAsync(OnSerializeMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnCompressMessage pipelineEvent)
+        public void Execute(OnAfterSerializeMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnAfterCompressMessage pipelineEvent)
+        public async Task ExecuteAsync(OnAfterSerializeMessage pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnEncryptMessage pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnEncryptMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterEncryptMessage pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterEncryptMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnCompressMessage pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnCompressMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterCompressMessage pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterCompressMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
     }
 }

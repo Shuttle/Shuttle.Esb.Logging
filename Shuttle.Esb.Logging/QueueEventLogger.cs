@@ -74,7 +74,7 @@ namespace Shuttle.Esb.Logging
 
         private void OnQueueDisposing(object sender, QueueEventArgs args)
         {
-            _logger.LogTrace($"[IQueueService.Dispo] : uri = '{args.Queue.Uri}'");
+            _logger.LogTrace($"[IQueueService.Dispose] : uri = '{args.Queue.Uri}'");
         }
 
         private void OnQueueDisposed(object sender, QueueEventArgs args)

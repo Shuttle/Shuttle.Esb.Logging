@@ -12,14 +12,24 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public Task Execute(OnStopping pipelineEvent)
+        public void Execute(OnStopping pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnStopped pipelineEvent)
+        public async Task ExecuteAsync(OnStopping pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnStopped pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnStopped pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
     }
 }

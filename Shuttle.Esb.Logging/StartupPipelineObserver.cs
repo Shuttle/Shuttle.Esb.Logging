@@ -21,59 +21,114 @@ namespace Shuttle.Esb.Logging
         {
         }
 
-        public Task Execute(OnStarting pipelineEvent)
+        public void Execute(OnStarting pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnCreatePhysicalQueues pipelineEvent)
+        public async Task ExecuteAsync(OnStarting pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnAfterCreatePhysicalQueues pipelineEvent)
+        public void Execute(OnCreatePhysicalQueues pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnStartInboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnCreatePhysicalQueues pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnAfterStartInboxProcessing pipelineEvent)
+        public void Execute(OnAfterCreatePhysicalQueues pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnStartControlInboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnAfterCreatePhysicalQueues pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnAfterStartControlInboxProcessing pipelineEvent)
+        public void Execute(OnStartInboxProcessing pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnStartOutboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnStartInboxProcessing pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnAfterStartOutboxProcessing pipelineEvent)
+        public void Execute(OnAfterStartInboxProcessing pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public Task Execute(OnStartDeferredMessageProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnAfterStartInboxProcessing pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            await Trace(pipelineEvent);
         }
 
-        public Task Execute(OnAfterStartDeferredMessageProcessing pipelineEvent)
+        public void Execute(OnStartControlInboxProcessing pipelineEvent)
         {
-            return Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnStartControlInboxProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterStartControlInboxProcessing pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterStartControlInboxProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnStartOutboxProcessing pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnStartOutboxProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterStartOutboxProcessing pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterStartOutboxProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnStartDeferredMessageProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterStartDeferredMessageProcessing pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterStartDeferredMessageProcessing pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
     }
 }
