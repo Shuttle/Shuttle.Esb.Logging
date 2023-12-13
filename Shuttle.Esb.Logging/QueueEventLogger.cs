@@ -46,8 +46,7 @@ namespace Shuttle.Esb.Logging
                     queue.MessageEnqueued -= QueueOnMessageEnqueued;
                     queue.MessageReceived -= QueueOnMessageReceived;
                     queue.MessageReleased -= QueueOnMessageReleased;
-                    queue.OperationStarting -= QueueOnOperationStarting;
-                    queue.OperationCompleted -= QueueOnOperationCompleted;
+                    queue.Operation -= QueueOnOperation;
                 }
 
                 _queueService.QueueCreated -= OnQueueCreated;
@@ -68,8 +67,7 @@ namespace Shuttle.Esb.Logging
             args.Queue.MessageEnqueued += QueueOnMessageEnqueued;
             args.Queue.MessageReceived += QueueOnMessageReceived;
             args.Queue.MessageReleased += QueueOnMessageReleased;
-            args.Queue.OperationStarting += QueueOnOperationStarting;
-            args.Queue.OperationCompleted += QueueOnOperationCompleted;
+            args.Queue.Operation += QueueOnOperation;
         }
 
         private void OnQueueDisposing(object sender, QueueEventArgs args)
@@ -110,18 +108,11 @@ namespace Shuttle.Esb.Logging
             _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReleased (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
         }
 
-        private void QueueOnOperationStarting(object sender, OperationEventArgs e)
+        private void QueueOnOperation(object sender, OperationEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.OperationStarting (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
-        }
-
-        private void QueueOnOperationCompleted(object sender, OperationEventArgs e)
-        {
-            var queue = (IQueue)sender;
-
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.OperationCompleted (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.Operation (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
         }
     }
 }
