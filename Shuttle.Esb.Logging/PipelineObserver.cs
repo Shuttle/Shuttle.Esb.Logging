@@ -44,7 +44,7 @@ namespace Shuttle.Esb.Logging
 
             _eventCounts[type] += 1;
 
-            _logger.LogTrace($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}]{(string.IsNullOrEmpty(message) ? string.Empty : $" : {message}")}");
+            _logger.LogTrace($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")}");
 
             await Task.CompletedTask;
         }
