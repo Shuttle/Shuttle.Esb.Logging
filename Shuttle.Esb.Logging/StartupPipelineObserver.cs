@@ -8,14 +8,10 @@ namespace Shuttle.Esb.Logging
         IPipelineObserver<OnStarting>,
         IPipelineObserver<OnCreatePhysicalQueues>,
         IPipelineObserver<OnAfterCreatePhysicalQueues>,
-        IPipelineObserver<OnStartInboxProcessing>,
-        IPipelineObserver<OnAfterStartInboxProcessing>,
-        IPipelineObserver<OnStartControlInboxProcessing>,
-        IPipelineObserver<OnAfterStartControlInboxProcessing>,
-        IPipelineObserver<OnStartOutboxProcessing>,
-        IPipelineObserver<OnAfterStartOutboxProcessing>,
-        IPipelineObserver<OnStartDeferredMessageProcessing>,
-        IPipelineObserver<OnAfterStartDeferredMessageProcessing>
+        IPipelineObserver<OnConfigureThreadPools>,
+        IPipelineObserver<OnAfterConfigureThreadPools>,
+        IPipelineObserver<OnStartThreadPools>,
+        IPipelineObserver<OnAfterStartThreadPools>
     {
         public StartupPipelineObserver(ILogger<StartupPipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration) : base(logger, serviceBusLoggingConfiguration)
         {
@@ -51,82 +47,42 @@ namespace Shuttle.Esb.Logging
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartInboxProcessing pipelineEvent)
+        public void Execute(OnConfigureThreadPools pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnStartInboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnConfigureThreadPools pipelineEvent)
         {
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartInboxProcessing pipelineEvent)
+        public void Execute(OnAfterConfigureThreadPools pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnAfterStartInboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnAfterConfigureThreadPools pipelineEvent)
         {
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnStartControlInboxProcessing pipelineEvent)
+        public void Execute(OnStartThreadPools pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnStartControlInboxProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnStartThreadPools pipelineEvent)
         {
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterStartControlInboxProcessing pipelineEvent)
+        public void Execute(OnAfterStartThreadPools pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnAfterStartControlInboxProcessing pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnStartOutboxProcessing pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnStartOutboxProcessing pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnAfterStartOutboxProcessing pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnAfterStartOutboxProcessing pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnStartDeferredMessageProcessing pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnAfterStartDeferredMessageProcessing pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnAfterStartDeferredMessageProcessing pipelineEvent)
+        public async Task ExecuteAsync(OnAfterStartThreadPools pipelineEvent)
         {
             await Trace(pipelineEvent);
         }

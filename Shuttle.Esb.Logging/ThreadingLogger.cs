@@ -11,19 +11,17 @@ namespace Shuttle.Esb.Logging
 {
     public class ThreadingLogger : IHostedService
     {
-        private readonly IServiceBusConfiguration _serviceBusConfiguration;
         private readonly Type _pipelineType = typeof(StartupPipeline);
         private readonly ILogger<ThreadingLogger> _logger;
         private readonly IPipelineFactory _pipelineFactory;
         private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
 
-        public ThreadingLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ThreadingLogger> logger, IServiceBusConfiguration serviceBusConfiguration, IPipelineFactory pipelineFactory)
+        public ThreadingLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ThreadingLogger> logger, IPipelineFactory pipelineFactory)
         {
             Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
 
             _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
             _logger = Guard.AgainstNull(logger, nameof(logger));
-            _serviceBusConfiguration = Guard.AgainstNull(serviceBusConfiguration, nameof(serviceBusConfiguration));
             _pipelineFactory = Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
 
             if (_serviceBusLoggingOptions.Threading)
@@ -44,7 +42,7 @@ namespace Shuttle.Esb.Logging
                 return;
             }
 
-            args.Pipeline.RegisterObserver(new ThreadingObserver(_logger, _serviceBusConfiguration));
+            args.Pipeline.RegisterObserver(new ThreadingObserver(_logger));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
