@@ -24,6 +24,7 @@ namespace Shuttle.Esb.Logging
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
                 options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
                 options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
+                options.Threading = serviceBusLoggingBuilder.Options.Threading;
             });
 
             services.AddHostedService<QueueEventLogger>();
@@ -36,6 +37,7 @@ namespace Shuttle.Esb.Logging
             services.AddHostedService<DeferredMessagePipelineLogger>();
             services.AddHostedService<DispatchTransportMessagePipelineLogger>();
             services.AddHostedService<TransportMessagePipelineLogger>();
+            services.AddHostedService<ThreadingLogger>();
 
             services.AddSingleton<IServiceBusLoggingConfiguration, ServiceBusLoggingConfiguration>();
 

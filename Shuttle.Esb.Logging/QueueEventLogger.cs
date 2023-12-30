@@ -23,12 +23,14 @@ namespace Shuttle.Esb.Logging
             _logger = Guard.AgainstNull(logger, nameof(logger));
             _queueService = Guard.AgainstNull(queueService, nameof(queueService));
 
-            if (_serviceBusLoggingOptions.QueueEvents)
+            if (!_serviceBusLoggingOptions.QueueEvents)
             {
-                _queueService.QueueCreated += OnQueueCreated;
-                _queueService.QueueDisposing+= OnQueueDisposing;
-                _queueService.QueueDisposed+= OnQueueDisposed;
+                return;
             }
+
+            _queueService.QueueCreated += OnQueueCreated;
+            _queueService.QueueDisposing+= OnQueueDisposing;
+            _queueService.QueueDisposed+= OnQueueDisposed;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

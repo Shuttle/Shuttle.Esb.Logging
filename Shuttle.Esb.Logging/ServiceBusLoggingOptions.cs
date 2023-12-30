@@ -8,5 +8,6 @@ namespace Shuttle.Esb.Logging
         public List<string> PipelineTypes { get; set; } = new List<string>();
         public bool QueueEvents { get; set; }
         public bool TransportMessageDeferred { get; set; }
+        public bool Threading { get; set; }
     }
 }
