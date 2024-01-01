@@ -59,12 +59,12 @@ namespace Shuttle.Esb.Logging
 
         private void OnProcessorExecuting(object sender, ProcessorThreadEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorExecuting] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
+            _logger.LogTrace($@"[ProcessorExecuting] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
         }
 
         private void OnProcessorThreadActive(object sender, ProcessorThreadEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorThreadActive] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
+            _logger.LogTrace($@"[ProcessorThreadActive] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
         }
 
         private void OnProcessorThreadCreated(object sender, ProcessorThreadCreatedEventArgs e)
@@ -82,22 +82,22 @@ namespace Shuttle.Esb.Logging
 
         private void OnProcessorThreadOperationCanceled(object sender, ProcessorThreadEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorThreadOperationCanceled] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
+            _logger.LogTrace($@"[ProcessorThreadOperationCanceled] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
         }
 
         private void OnProcessorThreadStarting(object sender, ProcessorThreadEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorThreadStarting] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
+            _logger.LogTrace($@"[ProcessorThreadStarting] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
         }
 
         private void OnProcessorThreadStopped(object sender, ProcessorThreadStoppedEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorThreadStopped] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId} / aborted = '{e.Aborted}'");
+            _logger.LogTrace($@"[ProcessorThreadStopped] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId} / aborted = '{e.Aborted}'");
         }
 
         private void OnProcessorThreadStopping(object sender, ProcessorThreadEventArgs e)
         {
-            _logger.LogTrace($@"[ProcessorThreadStopping] : name = '{e.Name}' / execution count = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
+            _logger.LogTrace($@"[ProcessorThreadStopping] : name = '{e.Name}' / processor = {((ProcessorThread)sender).Processor.GetType().FullName} / managed thread id = {e.ManagedThreadId}");
         }
 
         private void Wire(IProcessorThreadPool processorThreadPool)
