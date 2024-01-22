@@ -27,19 +27,19 @@ namespace Shuttle.Esb.Logging
             }
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             if (_serviceBusLoggingOptions.TransportMessageDeferred)
             {
                 _deferTransportMessageObserver.TransportMessageDeferred -= OnTransportMessageDeferred;
             }
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private void OnTransportMessageDeferred(object sender, TransportMessageDeferredEventArgs args)

@@ -28,9 +28,9 @@ namespace Shuttle.Esb.Logging
             }
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private void OnPipelineCreated(object sender, PipelineEventArgs args)
@@ -43,7 +43,7 @@ namespace Shuttle.Esb.Logging
             args.Pipeline.RegisterObserver(new DispatchTransportMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             if (_serviceBusLoggingConfiguration.ShouldLogPipelineType(_pipelineType))
             {
@@ -51,7 +51,7 @@ namespace Shuttle.Esb.Logging
 
             }
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

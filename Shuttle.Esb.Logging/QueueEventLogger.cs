@@ -33,12 +33,12 @@ namespace Shuttle.Esb.Logging
             _queueService.QueueDisposed+= OnQueueDisposed;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             if (_serviceBusLoggingOptions.QueueEvents)
             {
@@ -56,7 +56,7 @@ namespace Shuttle.Esb.Logging
                 _queueService.QueueDisposed -= OnQueueDisposed;
             }
             
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private void OnQueueCreated(object sender, QueueEventArgs args)

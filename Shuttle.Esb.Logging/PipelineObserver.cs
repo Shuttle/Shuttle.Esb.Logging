@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
+using Shuttle.Core.Reflection;
 
 namespace Shuttle.Esb.Logging
 {
@@ -71,12 +72,12 @@ namespace Shuttle.Esb.Logging
 
         public void Execute(OnPipelineException pipelineEvent)
         {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
+            ExecuteAsync(pipelineEvent).GetAwaiter().GetResult();
         }
 
         public async Task ExecuteAsync(OnPipelineException pipelineEvent)
         {
-            await Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.Message}'");
+            await Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.AllMessages()}'");
         }
     }
 }
