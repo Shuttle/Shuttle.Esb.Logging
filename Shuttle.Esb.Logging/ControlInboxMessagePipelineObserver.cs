@@ -18,8 +18,8 @@ namespace Shuttle.Esb.Logging
         IPipelineObserver<OnDeserializeMessage>,
         IPipelineObserver<OnAfterDeserializeMessage>,
         IPipelineObserver<OnStartTransactionScope>,
-        IPipelineObserver<OnAssessMessageHandling>,
-        IPipelineObserver<OnAfterAssessMessageHandling>,
+        IPipelineObserver<OnEvaluateMessageHandling>,
+        IPipelineObserver<OnAfterEvaluateMessageHandling>,
         IPipelineObserver<OnProcessIdempotenceMessage>,
         IPipelineObserver<OnHandleMessage>,
         IPipelineObserver<OnAfterHandleMessage>,
@@ -56,12 +56,12 @@ namespace Shuttle.Esb.Logging
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnAfterAssessMessageHandling pipelineEvent)
+        public void Execute(OnAfterEvaluateMessageHandling pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnAfterAssessMessageHandling pipelineEvent)
+        public async Task ExecuteAsync(OnAfterEvaluateMessageHandling pipelineEvent)
         {
             await Trace(pipelineEvent);
         }
@@ -136,12 +136,12 @@ namespace Shuttle.Esb.Logging
             await Trace(pipelineEvent);
         }
 
-        public void Execute(OnAssessMessageHandling pipelineEvent)
+        public void Execute(OnEvaluateMessageHandling pipelineEvent)
         {
             Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public async Task ExecuteAsync(OnAssessMessageHandling pipelineEvent)
+        public async Task ExecuteAsync(OnEvaluateMessageHandling pipelineEvent)
         {
             await Trace(pipelineEvent);
         }
