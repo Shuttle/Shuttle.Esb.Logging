@@ -32,7 +32,6 @@ namespace Shuttle.Esb.Logging
             services.AddHostedService<StartupPipelineLogger>();
             services.AddHostedService<ShutdownPipelineLogger>();
             services.AddHostedService<InboxMessagePipelineLogger>();
-            services.AddHostedService<ControlInboxMessagePipelineLogger>();
             services.AddHostedService<OutboxPipelineLogger>();
             services.AddHostedService<DeferredMessagePipelineLogger>();
             services.AddHostedService<DispatchTransportMessagePipelineLogger>();
