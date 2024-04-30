@@ -13,7 +13,6 @@ services.AddServiceBusLogging(); // all logging options enabled
 Specific logging options may be specified:
 
 ```c#
-```
 services.AddServiceBusLogging(builder =>
 {
 	builder.Options.PipelineTypes = new List<string> { "pieline-type-name" };
@@ -23,5 +22,4 @@ services.AddServiceBusLogging(builder =>
 	builder.Options.AddPipelineEventType<PipelineEventType>();
 	builder.Options.AddPipelineEventType(pipelineEventType);
 });
-```
 ```

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
@@ -18,8 +19,8 @@ namespace Shuttle.Esb.Logging
         IPipelineObserver<OnDeserializeMessage>,
         IPipelineObserver<OnAfterDeserializeMessage>,
         IPipelineObserver<OnStartTransactionScope>,
-        IPipelineObserver<OnAssessMessageHandling>,
-        IPipelineObserver<OnAfterAssessMessageHandling>,
+        IPipelineObserver<OnEvaluateMessageHandling>,
+        IPipelineObserver<OnAfterEvaluateMessageHandling>,
         IPipelineObserver<OnProcessIdempotenceMessage>,
         IPipelineObserver<OnHandleMessage>,
         IPipelineObserver<OnAfterHandleMessage>,
@@ -38,114 +39,226 @@ namespace Shuttle.Esb.Logging
 
         public void Execute(OnAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAcknowledgeMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public void Execute(OnAfterAssessMessageHandling pipelineEvent)
+        public async Task ExecuteAsync(OnAfterAcknowledgeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnAfterEvaluateMessageHandling pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterEvaluateMessageHandling pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterDecompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterDecompressMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterDecryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterDecryptMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterDeserializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterDeserializeMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterDeserializeTransportMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterGetMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterGetMessage pipelineEvent)
+        {
+            Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
+
+            await Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
         }
 
         public void Execute(OnAfterHandleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAfterHandleMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnAfterSendDeferred pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
         }
 
-        public void Execute(OnAssessMessageHandling pipelineEvent)
+        public async Task ExecuteAsync(OnAfterSendDeferred pipelineEvent)
         {
-            Trace(pipelineEvent);
+            await Trace(pipelineEvent);
+        }
+
+        public void Execute(OnEvaluateMessageHandling pipelineEvent)
+        {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnEvaluateMessageHandling pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnCompleteTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnCompleteTransactionScope pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnDecompressMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnDecompressMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnDecryptMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnDecryptMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnDeserializeMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnDeserializeMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnDeserializeTransportMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnDeserializeTransportMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnDisposeTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnDisposeTransactionScope pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnGetMessage pipelineEvent)
         {
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnGetMessage pipelineEvent)
+        {
             Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
 
-            Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
+            await Trace(pipelineEvent, $"working = {pipelineEvent.Pipeline.State.GetWorking()} / has message = {pipelineEvent.Pipeline.State.GetReceivedMessage() != null}");
         }
 
         public void Execute(OnHandleMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnHandleMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnProcessIdempotenceMessage pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnProcessIdempotenceMessage pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnSendDeferred pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnSendDeferred pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnStartTransactionScope pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnStartTransactionScope pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
     }
 }

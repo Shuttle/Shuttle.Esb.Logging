@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
+using Shuttle.Core.Reflection;
 
 namespace Shuttle.Esb.Logging
 {
@@ -25,7 +27,7 @@ namespace Shuttle.Esb.Logging
             _serviceBusLoggingConfiguration = serviceBusLoggingConfiguration;
         }
         
-        protected void Trace(IPipelineEvent pipelineEvent, string message = "")
+        protected async Task Trace(IPipelineEvent pipelineEvent, string message = "")
         {
             Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
 
@@ -43,21 +45,39 @@ namespace Shuttle.Esb.Logging
 
             _eventCounts[type] += 1;
 
-            _logger.LogTrace($"{DateTime.Now:O} - [{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}]{(string.IsNullOrEmpty(message) ? string.Empty : $" : {message}")}");
+            _logger.LogTrace($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")}");
+
+            await Task.CompletedTask;
         }
+
         public void Execute(OnAbortPipeline pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnAbortPipeline pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnPipelineStarting pipelineEvent)
         {
-            Trace(pipelineEvent);
+            Trace(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnPipelineStarting pipelineEvent)
+        {
+            await Trace(pipelineEvent);
         }
 
         public void Execute(OnPipelineException pipelineEvent)
         {
-            Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.Message}'");
+            ExecuteAsync(pipelineEvent).GetAwaiter().GetResult();
+        }
+
+        public async Task ExecuteAsync(OnPipelineException pipelineEvent)
+        {
+            await Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.AllMessages()}'");
         }
     }
 }

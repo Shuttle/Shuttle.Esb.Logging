@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
@@ -21,16 +22,21 @@ namespace Shuttle.Esb.Logging
             {
                 options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
                 options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
+                options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
+                options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
+                options.Threading = serviceBusLoggingBuilder.Options.Threading;
             });
 
-            services.AddPipelineModule<StartupPipelineLogger>();
-            services.AddPipelineModule<ShutdownPipelineLogger>();
-            services.AddPipelineModule<InboxMessagePipelineLogger>();
-            services.AddPipelineModule<ControlInboxMessagePipelineLogger>();
-            services.AddPipelineModule<OutboxPipelineLogger>();
-            services.AddPipelineModule<DeferredMessagePipelineLogger>();
-            services.AddPipelineModule<DispatchTransportMessagePipelineLogger>();
-            services.AddPipelineModule<TransportMessagePipelineLogger>();
+            services.AddHostedService<QueueEventLogger>();
+            services.AddHostedService<TransportMessageDeferredLogger>();
+            services.AddHostedService<StartupPipelineLogger>();
+            services.AddHostedService<ShutdownPipelineLogger>();
+            services.AddHostedService<InboxMessagePipelineLogger>();
+            services.AddHostedService<OutboxPipelineLogger>();
+            services.AddHostedService<DeferredMessagePipelineLogger>();
+            services.AddHostedService<DispatchTransportMessagePipelineLogger>();
+            services.AddHostedService<TransportMessagePipelineLogger>();
+            services.AddHostedService<ThreadingLogger>();
 
             services.AddSingleton<IServiceBusLoggingConfiguration, ServiceBusLoggingConfiguration>();
 

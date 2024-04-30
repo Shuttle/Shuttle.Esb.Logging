@@ -25,8 +25,7 @@ namespace Shuttle.Esb.Logging
             return serviceBusLoggingOptions;
         }
 
-        public static ServiceBusLoggingOptions AddPipelineEventType<T>(
-            this ServiceBusLoggingOptions serviceBusLoggingOptions)
+        public static ServiceBusLoggingOptions AddPipelineEventType<T>(this ServiceBusLoggingOptions serviceBusLoggingOptions)
         {
             return serviceBusLoggingOptions.AddPipelineEventType(typeof(T));
         }

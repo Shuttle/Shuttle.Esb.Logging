@@ -3,25 +3,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 
 namespace Shuttle.Esb.Logging
 {
-    public class OutboxPipelineLogger : IHostedService
+    public class ThreadingLogger : IHostedService
     {
-        private readonly Type _pipelineType = typeof(OutboxPipeline);
-        private readonly ILogger<OutboxPipelineLogger> _logger;
-        private readonly IServiceBusLoggingConfiguration _serviceBusLoggingConfiguration;
+        private readonly Type _pipelineType = typeof(StartupPipeline);
+        private readonly ILogger<ThreadingLogger> _logger;
         private readonly IPipelineFactory _pipelineFactory;
+        private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
 
-        public OutboxPipelineLogger(ILogger<OutboxPipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration, IPipelineFactory pipelineFactory)
+        public ThreadingLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ThreadingLogger> logger, IPipelineFactory pipelineFactory)
         {
+            Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
+
+            _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
             _logger = Guard.AgainstNull(logger, nameof(logger));
-            _serviceBusLoggingConfiguration = Guard.AgainstNull(serviceBusLoggingConfiguration, nameof(serviceBusLoggingConfiguration));
             _pipelineFactory = Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
 
-            if (_serviceBusLoggingConfiguration.ShouldLogPipelineType(_pipelineType))
+            if (_serviceBusLoggingOptions.Threading)
             {
                 _pipelineFactory.PipelineCreated += OnPipelineCreated;
             }
@@ -39,14 +42,16 @@ namespace Shuttle.Esb.Logging
                 return;
             }
 
-            args.Pipeline.RegisterObserver(new OutboxPipelineObserver(_logger, _serviceBusLoggingConfiguration));
+            args.Pipeline.RegisterObserver(new ThreadingObserver(_logger));
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            if (_serviceBusLoggingConfiguration.ShouldLogPipelineType(_pipelineType))
+            if (_serviceBusLoggingOptions.Threading)
             {
                 _pipelineFactory.PipelineCreated -= OnPipelineCreated;
+
+
             }
 
             await Task.CompletedTask;
