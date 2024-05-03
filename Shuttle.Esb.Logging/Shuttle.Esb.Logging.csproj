@@ -18,7 +18,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     <PackageReference Include="Shuttle.Core.Contract" Version="11.1.0" />
-    <PackageReference Include="Shuttle.Esb" Version="14.0.0" />
+    <PackageReference Include="Shuttle.Esb" Version="14.0.1" />
   </ItemGroup>
 
   <ItemGroup>
