@@ -38,16 +38,21 @@ namespace Shuttle.Esb.Logging
                 return;
             }
 
+            Increment(type);
+
+            _logger.LogTrace($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")}");
+
+            await Task.CompletedTask;
+        }
+
+        private void Increment(Type type)
+        {
             if (!_eventCounts.ContainsKey(type))
             {
                 _eventCounts.Add(type, 0);
             }
 
             _eventCounts[type] += 1;
-
-            _logger.LogTrace($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")}");
-
-            await Task.CompletedTask;
         }
 
         public void Execute(OnAbortPipeline pipelineEvent)
@@ -77,7 +82,15 @@ namespace Shuttle.Esb.Logging
 
         public async Task ExecuteAsync(OnPipelineException pipelineEvent)
         {
-            await Trace(pipelineEvent, $"exception = '{pipelineEvent.Pipeline.Exception?.AllMessages()}'");
+            var type = pipelineEvent.GetType();
+
+            Increment(type);
+
+            var message = $"exception = '{pipelineEvent.Pipeline.Exception?.AllMessages()}'";
+
+            _logger.LogError($"[{type.Name} (thread {System.Threading.Thread.CurrentThread.ManagedThreadId}) / {_eventCounts[type]}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")}");
+
+            await Task.CompletedTask;
         }
     }
 }
