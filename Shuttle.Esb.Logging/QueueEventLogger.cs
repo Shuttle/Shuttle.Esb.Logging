@@ -86,35 +86,35 @@ namespace Shuttle.Esb.Logging
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageAcknowledged (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageAcknowledged] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
         }
 
         private void QueueOnMessageEnqueued(object sender, MessageEnqueuedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageEnqueued (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageEnqueued] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
         }
 
         private void QueueOnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReceived (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReceived] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
         }
 
         private void QueueOnMessageReleased(object sender, MessageReleasedEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReleased (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReleased] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
         }
 
         private void QueueOnOperation(object sender, OperationEventArgs e)
         {
             var queue = (IQueue)sender;
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.Operation (thread {Thread.CurrentThread.ManagedThreadId})] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}'");
+            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.Operation] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }
