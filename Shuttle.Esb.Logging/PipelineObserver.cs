@@ -42,7 +42,7 @@ public abstract class PipelineObserver<T> :
 
         var message = $"exception = '{pipelineContext.Pipeline.Exception?.AllMessages()}'";
 
-        _logger.LogError($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+        _logger.LogError($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Environment.CurrentManagedThreadId}");
 
         await Task.CompletedTask;
     }
@@ -64,7 +64,7 @@ public abstract class PipelineObserver<T> :
 
         Increment(type);
 
-        _logger.LogTrace($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+        _logger.LogTrace($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Environment.CurrentManagedThreadId}");
 
         await Task.CompletedTask;
     }

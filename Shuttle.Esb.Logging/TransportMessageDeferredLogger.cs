@@ -44,6 +44,6 @@ public class TransportMessageDeferredLogger : IHostedService
     {
         Guard.AgainstNull(args);
 
-        _logger.LogTrace($"[TransportMessageDeferred] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+        _logger.LogTrace($"[TransportMessageDeferred] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}' / managed thread id = {Environment.CurrentManagedThreadId}");
     }
 }
