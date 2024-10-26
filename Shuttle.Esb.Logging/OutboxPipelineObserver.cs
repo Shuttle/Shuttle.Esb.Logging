@@ -24,41 +24,41 @@ public class OutboxPipelineObserver : PipelineObserver<OutboxPipelineLogger>,
     {
         Guard.AgainstNull(pipelineContext);
 
-        await Trace(pipelineContext, $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
+        await TraceAsync(pipelineContext, $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterGetMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDeserializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDeserializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDispatchTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDispatchTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAcknowledgeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterAcknowledgeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 }

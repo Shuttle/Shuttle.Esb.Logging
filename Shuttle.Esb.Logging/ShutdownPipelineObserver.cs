@@ -15,11 +15,11 @@ public class ShutdownPipelineObserver : PipelineObserver<ShutdownPipelineLogger>
 
     public async Task ExecuteAsync(IPipelineContext<OnStopping> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnStopped> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 }

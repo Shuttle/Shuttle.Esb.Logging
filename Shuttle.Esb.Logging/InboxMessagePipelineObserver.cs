@@ -33,98 +33,98 @@ public class InboxMessagePipelineObserver : PipelineObserver<InboxMessagePipelin
 
     public async Task ExecuteAsync(IPipelineContext<OnAcknowledgeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterAcknowledgeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterEvaluateMessageHandling> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDecompressMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDecryptMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDeserializeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDeserializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterGetMessage> pipelineContext)
     {
         Guard.AgainstNull(pipelineContext);
 
-        await Trace(pipelineContext, $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
+        await TraceAsync(pipelineContext, $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterHandleMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterSendDeferred> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnEvaluateMessageHandling> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDecompressMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDecryptMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDeserializeMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDeserializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnGetMessage> pipelineContext)
     {
-        await Trace(Guard.AgainstNull(pipelineContext), $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
+        await TraceAsync(Guard.AgainstNull(pipelineContext), $"working = {pipelineContext.Pipeline.State.GetWorking()} / has message = {pipelineContext.Pipeline.State.GetReceivedMessage() != null}");
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnHandleMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnProcessIdempotenceMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnSendDeferred> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 }

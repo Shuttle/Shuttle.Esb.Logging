@@ -20,36 +20,36 @@ public class StartupPipelineObserver : PipelineObserver<StartupPipelineLogger>,
 
     public async Task ExecuteAsync(IPipelineContext<OnStarting> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnCreatePhysicalQueues> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterCreatePhysicalQueues> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnConfigureThreadPools> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterConfigureThreadPools> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnStartThreadPools> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterStartThreadPools> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 }

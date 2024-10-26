@@ -19,31 +19,31 @@ public class DispatchTransportMessagePipelineObserver : PipelineObserver<Dispatc
 
     public async Task ExecuteAsync(IPipelineContext<OnFindRouteForMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterFindRouteForMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnSerializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterSerializeTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnDispatchTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterDispatchTransportMessage> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 }

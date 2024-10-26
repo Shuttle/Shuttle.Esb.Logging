@@ -26,12 +26,12 @@ public abstract class PipelineObserver<T> :
 
     public async Task ExecuteAsync(IPipelineContext<OnAbortPipeline> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnPipelineStarting> pipelineContext)
     {
-        await Trace(pipelineContext);
+        await TraceAsync(pipelineContext);
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnPipelineException> pipelineContext)
@@ -49,15 +49,11 @@ public abstract class PipelineObserver<T> :
 
     private void Increment(Type type)
     {
-        if (!_eventCounts.ContainsKey(type))
-        {
-            _eventCounts.Add(type, 0);
-        }
-
+        _eventCounts.TryAdd(type, 0);
         _eventCounts[type] += 1;
     }
 
-    protected async Task Trace(IPipelineContext pipelineContext, string message = "")
+    protected async Task TraceAsync(IPipelineContext pipelineContext, string message = "")
     {
         var type = Guard.AgainstNull(pipelineContext).GetType();
 
