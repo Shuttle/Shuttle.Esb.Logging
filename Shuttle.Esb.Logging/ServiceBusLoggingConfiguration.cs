@@ -5,56 +5,50 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public class ServiceBusLoggingConfiguration : IServiceBusLoggingConfiguration
 {
-    public class ServiceBusLoggingConfiguration : IServiceBusLoggingConfiguration
+    private readonly List<Type> _pipelineEventTypes = new();
+    private readonly List<Type> _pipelineTypes = new();
+
+    public ServiceBusLoggingConfiguration(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ServiceBusLoggingConfiguration> logger)
     {
-        private readonly List<Type> _pipelineTypes = new List<Type>();
-        private readonly List<Type> _pipelineEventTypes = new List<Type>();
-        
-        public ServiceBusLoggingConfiguration(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ServiceBusLoggingConfiguration> logger)
+        Guard.AgainstNull(Guard.AgainstNull(serviceBusLoggingOptions).Value);
+        Guard.AgainstNull(logger);
+
+        foreach (var pipelineType in serviceBusLoggingOptions.Value.PipelineTypes)
         {
-            Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
-            Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
-            Guard.AgainstNull(logger, nameof(logger));
-
-            foreach (var pipelineType in serviceBusLoggingOptions.Value.PipelineTypes)
+            try
             {
-                try
-                {
-                    _pipelineTypes.Add(Type.GetType(pipelineType));
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex.Message);
-                }    
+                _pipelineTypes.Add(Guard.AgainstNull(Type.GetType(pipelineType)));
             }
-
-            foreach (var pipelineEventType in serviceBusLoggingOptions.Value.PipelineEventTypes)
+            catch (Exception ex)
             {
-                try
-                {
-                    _pipelineEventTypes.Add(Type.GetType(pipelineEventType));
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex.Message);
-                }
+                logger.LogError(ex.Message);
             }
         }
 
-        public bool ShouldLogPipelineType(Type pipelineType)
+        foreach (var pipelineEventType in serviceBusLoggingOptions.Value.PipelineEventTypes)
         {
-            Guard.AgainstNull(pipelineType, nameof(pipelineType));
-
-            return !_pipelineTypes.Any() || _pipelineTypes.Contains(pipelineType);
+            try
+            {
+                _pipelineEventTypes.Add(Guard.AgainstNull(Type.GetType(pipelineEventType)));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
         }
+    }
 
-        public bool ShouldLogPipelineEventType(Type pipelineEventType)
-        {
-            Guard.AgainstNull(pipelineEventType, nameof(pipelineEventType));
+    public bool ShouldLogPipelineType(Type pipelineType)
+    {
+        return !_pipelineTypes.Any() || _pipelineTypes.Contains(Guard.AgainstNull(pipelineType));
+    }
 
-            return !_pipelineEventTypes.Any() || _pipelineEventTypes.Contains(pipelineEventType);
-        }
+    public bool ShouldLogPipelineEventType(Type pipelineEventType)
+    {
+        return !_pipelineEventTypes.Any() || _pipelineEventTypes.Contains(Guard.AgainstNull(pipelineEventType));
     }
 }

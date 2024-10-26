@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public interface IServiceBusLoggingConfiguration
 {
-    public interface IServiceBusLoggingConfiguration
-    {
-        bool ShouldLogPipelineType(Type pipelineType);
-        bool ShouldLogPipelineEventType(Type pipelineEventType);
-    }
+    bool ShouldLogPipelineEventType(Type pipelineEventType);
+    bool ShouldLogPipelineType(Type pipelineType);
 }

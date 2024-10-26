@@ -7,54 +7,49 @@ using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public class ThreadingLogger : IHostedService
 {
-    public class ThreadingLogger : IHostedService
+    private readonly ILogger<ThreadingLogger> _logger;
+    private readonly IPipelineFactory _pipelineFactory;
+    private readonly Type _pipelineType = typeof(StartupPipeline);
+    private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+
+    public ThreadingLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ThreadingLogger> logger, IPipelineFactory pipelineFactory)
     {
-        private readonly Type _pipelineType = typeof(StartupPipeline);
-        private readonly ILogger<ThreadingLogger> _logger;
-        private readonly IPipelineFactory _pipelineFactory;
-        private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+        _serviceBusLoggingOptions = Guard.AgainstNull(Guard.AgainstNull(serviceBusLoggingOptions).Value);
+        _logger = Guard.AgainstNull(logger);
+        _pipelineFactory = Guard.AgainstNull(pipelineFactory);
 
-        public ThreadingLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<ThreadingLogger> logger, IPipelineFactory pipelineFactory)
+        if (_serviceBusLoggingOptions.Threading)
         {
-            Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
+            _pipelineFactory.PipelineCreated += OnPipelineCreated;
+        }
+    }
 
-            _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
-            _logger = Guard.AgainstNull(logger, nameof(logger));
-            _pipelineFactory = Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
 
-            if (_serviceBusLoggingOptions.Threading)
-            {
-                _pipelineFactory.PipelineCreated += OnPipelineCreated;
-            }
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_serviceBusLoggingOptions.Threading)
+        {
+            _pipelineFactory.PipelineCreated -= OnPipelineCreated;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        await Task.CompletedTask;
+    }
+
+    private void OnPipelineCreated(object? sender, PipelineEventArgs args)
+    {
+        if (args.Pipeline.GetType() != _pipelineType)
         {
-            await Task.CompletedTask;
+            return;
         }
 
-        private void OnPipelineCreated(object sender, PipelineEventArgs args)
-        {
-            if (args.Pipeline.GetType() != _pipelineType)
-            {
-                return;
-            }
-
-            args.Pipeline.RegisterObserver(new ThreadingObserver(_logger));
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (_serviceBusLoggingOptions.Threading)
-            {
-                _pipelineFactory.PipelineCreated -= OnPipelineCreated;
-
-
-            }
-
-            await Task.CompletedTask;
-        }
+        args.Pipeline.RegisterObserver(new ThreadingObserver(_logger));
     }
 }

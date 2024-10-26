@@ -7,91 +7,69 @@ using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 using Shuttle.Core.Reflection;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public abstract class PipelineObserver<T> :
+    IPipelineObserver<OnPipelineStarting>,
+    IPipelineObserver<OnPipelineException>,
+    IPipelineObserver<OnAbortPipeline>
 {
-    public abstract class PipelineObserver<T> :
-        IPipelineObserver<OnPipelineStarting>,
-        IPipelineObserver<OnPipelineException>,
-        IPipelineObserver<OnAbortPipeline>
+    private readonly Dictionary<Type, int> _eventCounts = new();
+    private readonly ILogger<T> _logger;
+    private readonly IServiceBusLoggingConfiguration _serviceBusLoggingConfiguration;
+
+    protected PipelineObserver(ILogger<T> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration)
     {
-        private readonly ILogger<T> _logger;
-        private readonly IServiceBusLoggingConfiguration _serviceBusLoggingConfiguration;
+        _logger = Guard.AgainstNull(logger);
+        _serviceBusLoggingConfiguration = Guard.AgainstNull(serviceBusLoggingConfiguration);
+    }
 
-        private readonly Dictionary<Type, int> _eventCounts = new Dictionary<Type, int>();
+    public async Task ExecuteAsync(IPipelineContext<OnAbortPipeline> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        protected PipelineObserver(ILogger<T> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration)
+    public async Task ExecuteAsync(IPipelineContext<OnPipelineStarting> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
+
+    public async Task ExecuteAsync(IPipelineContext<OnPipelineException> pipelineContext)
+    {
+        var type = pipelineContext.GetType();
+
+        Increment(type);
+
+        var message = $"exception = '{pipelineContext.Pipeline.Exception?.AllMessages()}'";
+
+        _logger.LogError($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+
+        await Task.CompletedTask;
+    }
+
+    private void Increment(Type type)
+    {
+        if (!_eventCounts.ContainsKey(type))
         {
-            Guard.AgainstNull(logger, nameof(logger));
-            Guard.AgainstNull(serviceBusLoggingConfiguration, nameof(serviceBusLoggingConfiguration));
-
-            _logger = logger;
-            _serviceBusLoggingConfiguration = serviceBusLoggingConfiguration;
-        }
-        
-        protected async Task Trace(IPipelineEvent pipelineEvent, string message = "")
-        {
-            Guard.AgainstNull(pipelineEvent, nameof(pipelineEvent));
-
-            var type = pipelineEvent.GetType();
-
-            if (!_serviceBusLoggingConfiguration.ShouldLogPipelineEventType(type))
-            {
-                return;
-            }
-
-            Increment(type);
-
-            _logger.LogTrace($"[{type.Name}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-
-            await Task.CompletedTask;
-        }
-
-        private void Increment(Type type)
-        {
-            if (!_eventCounts.ContainsKey(type))
-            {
-                _eventCounts.Add(type, 0);
-            }
-
-            _eventCounts[type] += 1;
+            _eventCounts.Add(type, 0);
         }
 
-        public void Execute(OnAbortPipeline pipelineEvent)
+        _eventCounts[type] += 1;
+    }
+
+    protected async Task Trace(IPipelineContext pipelineContext, string message = "")
+    {
+        var type = Guard.AgainstNull(pipelineContext).GetType();
+
+        if (!_serviceBusLoggingConfiguration.ShouldLogPipelineEventType(type))
         {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
+            return;
         }
 
-        public async Task ExecuteAsync(OnAbortPipeline pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
+        Increment(type);
 
-        public void Execute(OnPipelineStarting pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
+        _logger.LogTrace($"[{type.Name}] : pipeline = {pipelineContext.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
 
-        public async Task ExecuteAsync(OnPipelineStarting pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnPipelineException pipelineEvent)
-        {
-            ExecuteAsync(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnPipelineException pipelineEvent)
-        {
-            var type = pipelineEvent.GetType();
-
-            Increment(type);
-
-            var message = $"exception = '{pipelineEvent.Pipeline.Exception?.AllMessages()}'";
-
-            _logger.LogError($"[{type.Name}] : pipeline = {pipelineEvent.Pipeline.GetType().FullName}{(string.IsNullOrEmpty(message) ? string.Empty : $" / {message}")} / call count = {_eventCounts[type]} / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-
-            await Task.CompletedTask;
-        }
+        await Task.CompletedTask;
     }
 }

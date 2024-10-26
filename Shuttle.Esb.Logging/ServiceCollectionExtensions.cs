@@ -1,46 +1,39 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Shuttle.Core.Contract;
-using Shuttle.Core.Pipelines;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddServiceBusLogging(this IServiceCollection services, Action<ServiceBusLoggingBuilder>? builder = null)
     {
-        public static IServiceCollection AddServiceBusLogging(this IServiceCollection services,
-            Action<ServiceBusLoggingBuilder> builder = null)
+        var serviceBusLoggingBuilder = new ServiceBusLoggingBuilder(Guard.AgainstNull(services));
+
+        builder?.Invoke(serviceBusLoggingBuilder);
+
+        services.AddOptions<ServiceBusLoggingOptions>().Configure(options =>
         {
-            Guard.AgainstNull(services, nameof(services));
+            options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
+            options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
+            options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
+            options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
+            options.Threading = serviceBusLoggingBuilder.Options.Threading;
+        });
 
-            var serviceBusLoggingBuilder = new ServiceBusLoggingBuilder(services);
+        services.AddHostedService<QueueEventLogger>();
+        services.AddHostedService<TransportMessageDeferredLogger>();
+        services.AddHostedService<StartupPipelineLogger>();
+        services.AddHostedService<ShutdownPipelineLogger>();
+        services.AddHostedService<InboxMessagePipelineLogger>();
+        services.AddHostedService<OutboxPipelineLogger>();
+        services.AddHostedService<DeferredMessagePipelineLogger>();
+        services.AddHostedService<DispatchTransportMessagePipelineLogger>();
+        services.AddHostedService<TransportMessagePipelineLogger>();
+        services.AddHostedService<ThreadingLogger>();
 
-            builder?.Invoke(serviceBusLoggingBuilder);
+        services.AddSingleton<IServiceBusLoggingConfiguration, ServiceBusLoggingConfiguration>();
 
-            services.AddOptions<ServiceBusLoggingOptions>().Configure(options =>
-            {
-                options.PipelineTypes = serviceBusLoggingBuilder.Options.PipelineTypes;
-                options.PipelineEventTypes = serviceBusLoggingBuilder.Options.PipelineEventTypes;
-                options.QueueEvents = serviceBusLoggingBuilder.Options.QueueEvents;
-                options.TransportMessageDeferred = serviceBusLoggingBuilder.Options.TransportMessageDeferred;
-                options.Threading = serviceBusLoggingBuilder.Options.Threading;
-            });
-
-            services.AddHostedService<QueueEventLogger>();
-            services.AddHostedService<TransportMessageDeferredLogger>();
-            services.AddHostedService<StartupPipelineLogger>();
-            services.AddHostedService<ShutdownPipelineLogger>();
-            services.AddHostedService<InboxMessagePipelineLogger>();
-            services.AddHostedService<OutboxPipelineLogger>();
-            services.AddHostedService<DeferredMessagePipelineLogger>();
-            services.AddHostedService<DispatchTransportMessagePipelineLogger>();
-            services.AddHostedService<TransportMessagePipelineLogger>();
-            services.AddHostedService<ThreadingLogger>();
-
-            services.AddSingleton<IServiceBusLoggingConfiguration, ServiceBusLoggingConfiguration>();
-
-            return services;
-        }
+        return services;
     }
 }

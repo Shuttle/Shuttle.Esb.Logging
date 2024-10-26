@@ -5,48 +5,45 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public class TransportMessageDeferredLogger : IHostedService
 {
-    public class TransportMessageDeferredLogger : IHostedService
+    private readonly IDeferTransportMessageObserver _deferTransportMessageObserver;
+    private readonly ILogger<TransportMessageDeferredLogger> _logger;
+    private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+
+    public TransportMessageDeferredLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<TransportMessageDeferredLogger> logger, IDeferTransportMessageObserver deferTransportMessageObserver)
     {
-        private readonly IDeferTransportMessageObserver _deferTransportMessageObserver;
-        private readonly ILogger<TransportMessageDeferredLogger> _logger;
-        private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+        _serviceBusLoggingOptions = Guard.AgainstNull(Guard.AgainstNull(serviceBusLoggingOptions).Value);
+        _logger = Guard.AgainstNull(logger);
+        _deferTransportMessageObserver = Guard.AgainstNull(deferTransportMessageObserver);
 
-        public TransportMessageDeferredLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<TransportMessageDeferredLogger> logger, IDeferTransportMessageObserver deferTransportMessageObserver)
+        if (_serviceBusLoggingOptions.TransportMessageDeferred)
         {
-            Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
+            _deferTransportMessageObserver.TransportMessageDeferred += OnTransportMessageDeferred;
+        }
+    }
 
-            _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
-            _logger = Guard.AgainstNull(logger, nameof(logger));
-            _deferTransportMessageObserver = Guard.AgainstNull(deferTransportMessageObserver, nameof(deferTransportMessageObserver));
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
 
-            if (_serviceBusLoggingOptions.TransportMessageDeferred)
-            {
-                _deferTransportMessageObserver.TransportMessageDeferred += OnTransportMessageDeferred;
-            }
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_serviceBusLoggingOptions.TransportMessageDeferred)
+        {
+            _deferTransportMessageObserver.TransportMessageDeferred -= OnTransportMessageDeferred;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
-        }
+        await Task.CompletedTask;
+    }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (_serviceBusLoggingOptions.TransportMessageDeferred)
-            {
-                _deferTransportMessageObserver.TransportMessageDeferred -= OnTransportMessageDeferred;
-            }
+    private void OnTransportMessageDeferred(object? sender, TransportMessageDeferredEventArgs args)
+    {
+        Guard.AgainstNull(args);
 
-            await Task.CompletedTask;
-        }
-
-        private void OnTransportMessageDeferred(object sender, TransportMessageDeferredEventArgs args)
-        {
-            Guard.AgainstNull(args, nameof(args));
-
-            _logger.LogTrace($"[TransportMessageDeferred] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
+        _logger.LogTrace($"[TransportMessageDeferred] : message id = '{args.TransportMessage.MessageId}' / message type = '{args.TransportMessage.MessageType}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
     }
 }

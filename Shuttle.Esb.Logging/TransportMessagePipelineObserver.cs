@@ -2,101 +2,60 @@
 using Microsoft.Extensions.Logging;
 using Shuttle.Core.Pipelines;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public class TransportMessagePipelineObserver : PipelineObserver<TransportMessagePipelineLogger>,
+    IPipelineObserver<OnAssembleMessage>,
+    IPipelineObserver<OnAfterAssembleMessage>,
+    IPipelineObserver<OnSerializeMessage>,
+    IPipelineObserver<OnAfterSerializeMessage>,
+    IPipelineObserver<OnEncryptMessage>,
+    IPipelineObserver<OnAfterEncryptMessage>,
+    IPipelineObserver<OnCompressMessage>,
+    IPipelineObserver<OnAfterCompressMessage>
 {
-    public class TransportMessagePipelineObserver : PipelineObserver<TransportMessagePipelineLogger>,
-        IPipelineObserver<OnAssembleMessage>,
-        IPipelineObserver<OnAfterAssembleMessage>,
-        IPipelineObserver<OnSerializeMessage>,
-        IPipelineObserver<OnAfterSerializeMessage>,
-        IPipelineObserver<OnEncryptMessage>,
-        IPipelineObserver<OnAfterEncryptMessage>,
-        IPipelineObserver<OnCompressMessage>,
-        IPipelineObserver<OnAfterCompressMessage>
+    public TransportMessagePipelineObserver(ILogger<TransportMessagePipelineLogger> logger, IServiceBusLoggingConfiguration serviceBusLoggingConfiguration) 
+        : base(logger, serviceBusLoggingConfiguration)
     {
-        public TransportMessagePipelineObserver(ILogger<TransportMessagePipelineLogger> logger,
-            IServiceBusLoggingConfiguration serviceBusLoggingConfiguration) : base(logger, serviceBusLoggingConfiguration)
-        {
-        }
+    }
 
-        public void Execute(OnAssembleMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAssembleMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public async Task ExecuteAsync(OnAssembleMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAfterAssembleMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public void Execute(OnAfterAssembleMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnSerializeMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public async Task ExecuteAsync(OnAfterAssembleMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAfterSerializeMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public void Execute(OnSerializeMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnEncryptMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public async Task ExecuteAsync(OnSerializeMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAfterEncryptMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public void Execute(OnAfterSerializeMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnCompressMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
+    }
 
-        public async Task ExecuteAsync(OnAfterSerializeMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnEncryptMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnEncryptMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnAfterEncryptMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnAfterEncryptMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnCompressMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnCompressMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
-
-        public void Execute(OnAfterCompressMessage pipelineEvent)
-        {
-            Trace(pipelineEvent).GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync(OnAfterCompressMessage pipelineEvent)
-        {
-            await Trace(pipelineEvent);
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAfterCompressMessage> pipelineContext)
+    {
+        await Trace(pipelineContext);
     }
 }

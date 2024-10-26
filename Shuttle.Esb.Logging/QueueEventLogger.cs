@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -6,115 +7,114 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
-namespace Shuttle.Esb.Logging
+namespace Shuttle.Esb.Logging;
+
+public class QueueEventLogger : IHostedService
 {
-    public class QueueEventLogger : IHostedService
+    private readonly ILogger<QueueEventLogger> _logger;
+    private readonly List<IQueue> _queues = new();
+    private readonly IQueueService _queueService;
+    private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+
+    public QueueEventLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<QueueEventLogger> logger, IQueueService queueService)
     {
-        private readonly ILogger<QueueEventLogger> _logger;
-        private readonly List<IQueue> _queues = new List<IQueue>();
-        private readonly IQueueService _queueService;
-        private readonly ServiceBusLoggingOptions _serviceBusLoggingOptions;
+        _serviceBusLoggingOptions = Guard.AgainstNull(Guard.AgainstNull(serviceBusLoggingOptions).Value);
+        _logger = Guard.AgainstNull(logger);
+        _queueService = Guard.AgainstNull(queueService);
 
-        public QueueEventLogger(IOptions<ServiceBusLoggingOptions> serviceBusLoggingOptions, ILogger<QueueEventLogger> logger, IQueueService queueService)
+        if (!_serviceBusLoggingOptions.QueueEvents)
         {
-            Guard.AgainstNull(serviceBusLoggingOptions, nameof(serviceBusLoggingOptions));
+            return;
+        }
 
-            _serviceBusLoggingOptions = Guard.AgainstNull(serviceBusLoggingOptions.Value, nameof(serviceBusLoggingOptions.Value));
-            _logger = Guard.AgainstNull(logger, nameof(logger));
-            _queueService = Guard.AgainstNull(queueService, nameof(queueService));
+        _queueService.QueueCreated += OnQueueCreated;
+        _queueService.QueueDisposing += OnQueueDisposing;
+        _queueService.QueueDisposed += OnQueueDisposed;
+    }
 
-            if (!_serviceBusLoggingOptions.QueueEvents)
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_serviceBusLoggingOptions.QueueEvents)
+        {
+            foreach (var queue in _queues)
             {
-                return;
+                queue.MessageAcknowledged -= QueueOnMessageAcknowledged;
+                queue.MessageEnqueued -= QueueOnMessageEnqueued;
+                queue.MessageReceived -= QueueOnMessageReceived;
+                queue.MessageReleased -= QueueOnMessageReleased;
+                queue.Operation -= QueueOnOperation;
             }
 
-            _queueService.QueueCreated += OnQueueCreated;
-            _queueService.QueueDisposing+= OnQueueDisposing;
-            _queueService.QueueDisposed+= OnQueueDisposed;
+            _queueService.QueueCreated -= OnQueueCreated;
+            _queueService.QueueDisposing -= OnQueueDisposing;
+            _queueService.QueueDisposed -= OnQueueDisposed;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        await Task.CompletedTask;
+    }
+
+    private void LogTrace(object? sender, Func<IQueue, string> messageFunc)
+    {
+        if (sender is IQueue queue)
         {
-            await Task.CompletedTask;
+            _logger.LogTrace(messageFunc(queue));
         }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
+        else
         {
-            if (_serviceBusLoggingOptions.QueueEvents)
-            {
-                foreach (var queue in _queues)
-                {
-                    queue.MessageAcknowledged -= QueueOnMessageAcknowledged;
-                    queue.MessageEnqueued -= QueueOnMessageEnqueued;
-                    queue.MessageReceived -= QueueOnMessageReceived;
-                    queue.MessageReleased -= QueueOnMessageReleased;
-                    queue.Operation -= QueueOnOperation;
-                }
-
-                _queueService.QueueCreated -= OnQueueCreated;
-                _queueService.QueueDisposing -= OnQueueDisposing;
-                _queueService.QueueDisposed -= OnQueueDisposed;
-            }
-            
-            await Task.CompletedTask;
+            _logger.LogTrace("[LogTrace] : sender != IQueue");
         }
+    }
 
-        private void OnQueueCreated(object sender, QueueEventArgs args)
-        {
-            _queues.Add(args.Queue);
+    private void OnQueueCreated(object? sender, QueueEventArgs args)
+    {
+        _queues.Add(args.Queue);
 
-            _logger.LogTrace($"[OnQueueCreated] : uri = '{args.Queue.Uri}'");
+        _logger.LogTrace($"[OnQueueCreated] : uri = '{args.Queue.Uri}'");
 
-            args.Queue.MessageAcknowledged += QueueOnMessageAcknowledged;
-            args.Queue.MessageEnqueued += QueueOnMessageEnqueued;
-            args.Queue.MessageReceived += QueueOnMessageReceived;
-            args.Queue.MessageReleased += QueueOnMessageReleased;
-            args.Queue.Operation += QueueOnOperation;
-        }
+        args.Queue.MessageAcknowledged += QueueOnMessageAcknowledged;
+        args.Queue.MessageEnqueued += QueueOnMessageEnqueued;
+        args.Queue.MessageReceived += QueueOnMessageReceived;
+        args.Queue.MessageReleased += QueueOnMessageReleased;
+        args.Queue.Operation += QueueOnOperation;
+    }
 
-        private void OnQueueDisposing(object sender, QueueEventArgs args)
-        {
-            _logger.LogTrace($"[IQueueService.Dispose] : uri = '{args.Queue.Uri}'");
-        }
+    private void OnQueueDisposed(object? sender, QueueEventArgs args)
+    {
+        _logger.LogTrace($"[IQueueService.Created] : uri = '{args.Queue.Uri}'");
+    }
 
-        private void OnQueueDisposed(object sender, QueueEventArgs args)
-        {
-            _logger.LogTrace($"[IQueueService.Created] : uri = '{args.Queue.Uri}'");
-        }
+    private void OnQueueDisposing(object? sender, QueueEventArgs args)
+    {
+        _logger.LogTrace($"[IQueueService.Dispose] : uri = '{args.Queue.Uri}'");
+    }
 
-        private void QueueOnMessageAcknowledged(object sender, MessageAcknowledgedEventArgs e)
-        {
-            var queue = (IQueue)sender;
+    private void QueueOnMessageAcknowledged(object? sender, MessageAcknowledgedEventArgs e)
+    {
+        LogTrace(sender, queue => $"[{queue.Uri.Uri.Scheme}.MessageAcknowledged] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+    }
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageAcknowledged] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
+    private void QueueOnMessageEnqueued(object? sender, MessageEnqueuedEventArgs e)
+    {
+        LogTrace(sender, queue => $"[{queue.Uri.Uri.Scheme}.MessageEnqueued] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+    }
 
-        private void QueueOnMessageEnqueued(object sender, MessageEnqueuedEventArgs e)
-        {
-            var queue = (IQueue)sender;
+    private void QueueOnMessageReceived(object? sender, MessageReceivedEventArgs e)
+    {
+        LogTrace(sender, queue => $"[{queue.Uri.Uri.Scheme}.MessageReceived] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+    }
 
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageEnqueued] : queue = '{queue.Uri.QueueName}' / message type = '{e.TransportMessage.MessageType}' / message id = '{e.TransportMessage.MessageId}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
+    private void QueueOnMessageReleased(object? sender, MessageReleasedEventArgs e)
+    {
+        LogTrace(sender, queue => $"[{queue.Uri.Uri.Scheme}.MessageReleased] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
+    }
 
-        private void QueueOnMessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            var queue = (IQueue)sender;
-
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReceived] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
-
-        private void QueueOnMessageReleased(object sender, MessageReleasedEventArgs e)
-        {
-            var queue = (IQueue)sender;
-
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.MessageReleased] : queue = '{queue.Uri.QueueName}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
-
-        private void QueueOnOperation(object sender, OperationEventArgs e)
-        {
-            var queue = (IQueue)sender;
-
-            _logger.LogTrace($"[{queue.Uri.Uri.Scheme}.Operation] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
-        }
+    private void QueueOnOperation(object? sender, OperationEventArgs e)
+    {
+        LogTrace(sender, queue => $"[{queue.Uri.Uri.Scheme}.Operation] : queue = '{queue.Uri.QueueName}' / operation name = '{e.Name}' / managed thread id = {Thread.CurrentThread.ManagedThreadId}");
     }
 }
