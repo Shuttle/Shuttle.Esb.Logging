@@ -49,6 +49,6 @@ public class InboxMessagePipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new InboxMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new InboxMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

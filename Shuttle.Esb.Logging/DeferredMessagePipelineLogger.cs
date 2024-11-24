@@ -49,6 +49,6 @@ public class DeferredMessagePipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new DeferredMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new DeferredMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

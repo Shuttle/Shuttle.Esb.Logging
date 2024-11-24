@@ -49,6 +49,6 @@ public class ShutdownPipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new ShutdownPipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new ShutdownPipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

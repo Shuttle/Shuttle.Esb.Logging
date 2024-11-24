@@ -49,6 +49,6 @@ public class TransportMessagePipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new TransportMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new TransportMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

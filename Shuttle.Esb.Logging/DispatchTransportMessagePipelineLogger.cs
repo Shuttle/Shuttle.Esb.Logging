@@ -49,6 +49,6 @@ public class DispatchTransportMessagePipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new DispatchTransportMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new DispatchTransportMessagePipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

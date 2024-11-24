@@ -50,6 +50,6 @@ public class ThreadingLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new ThreadingObserver(_logger));
+        args.Pipeline.AddObserver(new ThreadingObserver(_logger));
     }
 }

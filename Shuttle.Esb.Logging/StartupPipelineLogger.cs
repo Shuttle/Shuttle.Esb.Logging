@@ -49,6 +49,6 @@ public class StartupPipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new StartupPipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new StartupPipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }

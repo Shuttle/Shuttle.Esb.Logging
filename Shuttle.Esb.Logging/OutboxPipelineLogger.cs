@@ -49,6 +49,6 @@ public class OutboxPipelineLogger : IHostedService
             return;
         }
 
-        args.Pipeline.RegisterObserver(new OutboxPipelineObserver(_logger, _serviceBusLoggingConfiguration));
+        args.Pipeline.AddObserver(new OutboxPipelineObserver(_logger, _serviceBusLoggingConfiguration));
     }
 }
