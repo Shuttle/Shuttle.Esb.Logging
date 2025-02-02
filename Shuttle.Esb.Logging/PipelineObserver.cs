@@ -55,7 +55,7 @@ public abstract class PipelineObserver<T> :
 
     protected async Task TraceAsync(IPipelineContext pipelineContext, string message = "")
     {
-        var type = Guard.AgainstNull(pipelineContext).GetType();
+        var type = Guard.AgainstNull(pipelineContext).EventType;
 
         if (!_serviceBusLoggingConfiguration.ShouldLogPipelineEventType(type))
         {

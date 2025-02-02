@@ -16,13 +16,8 @@ public class InboxMessagePipelineObserver : PipelineObserver<InboxMessagePipelin
     IPipelineObserver<OnAfterDecryptMessage>,
     IPipelineObserver<OnDeserializeMessage>,
     IPipelineObserver<OnAfterDeserializeMessage>,
-    IPipelineObserver<OnEvaluateMessageHandling>,
-    IPipelineObserver<OnAfterEvaluateMessageHandling>,
-    IPipelineObserver<OnProcessIdempotenceMessage>,
     IPipelineObserver<OnHandleMessage>,
     IPipelineObserver<OnAfterHandleMessage>,
-    IPipelineObserver<OnSendDeferred>,
-    IPipelineObserver<OnAfterSendDeferred>,
     IPipelineObserver<OnAcknowledgeMessage>,
     IPipelineObserver<OnAfterAcknowledgeMessage>
 {
@@ -37,11 +32,6 @@ public class InboxMessagePipelineObserver : PipelineObserver<InboxMessagePipelin
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnAfterAcknowledgeMessage> pipelineContext)
-    {
-        await TraceAsync(pipelineContext);
-    }
-
-    public async Task ExecuteAsync(IPipelineContext<OnAfterEvaluateMessageHandling> pipelineContext)
     {
         await TraceAsync(pipelineContext);
     }
@@ -78,16 +68,6 @@ public class InboxMessagePipelineObserver : PipelineObserver<InboxMessagePipelin
         await TraceAsync(pipelineContext);
     }
 
-    public async Task ExecuteAsync(IPipelineContext<OnAfterSendDeferred> pipelineContext)
-    {
-        await TraceAsync(pipelineContext);
-    }
-
-    public async Task ExecuteAsync(IPipelineContext<OnEvaluateMessageHandling> pipelineContext)
-    {
-        await TraceAsync(pipelineContext);
-    }
-
     public async Task ExecuteAsync(IPipelineContext<OnDecompressMessage> pipelineContext)
     {
         await TraceAsync(pipelineContext);
@@ -114,16 +94,6 @@ public class InboxMessagePipelineObserver : PipelineObserver<InboxMessagePipelin
     }
 
     public async Task ExecuteAsync(IPipelineContext<OnHandleMessage> pipelineContext)
-    {
-        await TraceAsync(pipelineContext);
-    }
-
-    public async Task ExecuteAsync(IPipelineContext<OnProcessIdempotenceMessage> pipelineContext)
-    {
-        await TraceAsync(pipelineContext);
-    }
-
-    public async Task ExecuteAsync(IPipelineContext<OnSendDeferred> pipelineContext)
     {
         await TraceAsync(pipelineContext);
     }
